@@ -1,9 +1,87 @@
 <!DOCTYPE html>
 <html lang="Es">
 <head>
-<script src="miarchivo.js"></script>
+<h1>"¡Bienvenido al administrador de clases!"</h1>
+
+    <!-- estilos de la accion para registrar Alumno -->
+
+    <style>
+        #registrarAlumno-btn {
+            background-color: gray;
+            color: white;
+            border: none;
+            padding: .5em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #formularioRegistrarAlumno {
+            display: none;
+        }
+    </style>
+
+    <!-- estilos de la accion para calificar Alumnos -->
+
+    <style>
+        #calificarAlumnos-btn {
+            background-color: gray;
+            color: white;
+            border: none;
+            padding: .5em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #formularioCalificarAlumnos {
+            display: none;
+        }
+    </style>
+    
+
 </head>
 <body>
+
+    <!-- boton para registrar Alumnos en el sistema -->
+
+    <button id="registrarAlumno-btn">REGISTRAR ALUMNO</button><br/><br/>
+
+    <div id="formularioRegistrarAlumno">
+        <form id="registrarAlumno-form">
+            <label> Nombre: <input id="nombreAlumno" type="text"> </label> <br/><br/>
+            <label> Apellido: <input id="apellidoAlumno" type="text"> </label> <br/><br/>
+            <label> DNI: <input id="dniAlumno" type="number"> </label> <br/><br/>
+            <label> Fecha de Nacimiento: <input id="fechaNacimientoAlumno" type="date"> </label> <br/><br/>
+            <input type="submit" value="Registrar Alumno"> <br/><br/>
+        </form>
+    </div>
+
+    <!-- boton para calificar Alumnos -->
+
+    <button id="calificarAlumnos-btn">CALIFICAR ALUMNOS</button> <br/><br/>
+
+    <div id="formularioCalificarAlumnos">
+        <form id="calificarAlumnos-form">
+            <h2>Seleccione los datos del Evento:</h2>
+            <label id="materiaLabel"> Materia:</label>
+            <select id="materia-slct">
+                <option value="0">- Seleccionar -</option>
+                <option value="1">Matematica</option>
+                <option value="2">Programacion Web</option>
+                <option value="3">Diseño Digital</option>
+            </select> <br/><br/>
+            <label id="eventoLabel"> Nombre del Evento (Ej: Parcial 1): <input id="nombreEvento" type="text"> </label> <br/><br/>
+            <input id="seleccionarEvento-btn" type="button" value="Seleccionar Evento"></input> <br/><br/>
+            <h2>Calificar Alumno:</h2>
+            <h3 id="nombreAlumnoNota"></h3>
+            <label> Nota: <input id="nota" type="range" min="0" max="10" value=0> <span id="notas">0</span> </label> <br/><br/>
+            <input id="calificarAlumno-btn" type="button" value="Calificar"></input> <br/><br/>
+        </form>
+        <h4 id="finEvento"></h4>
+    </div> 
+
     
+
+
+    <script src="miarchivo.js"></script>
 </body>
 </html>
