@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="Es">
 <head>
-<h1>"¡Bienvenido al administrador de clases!"</h1>
+<h1>¡Bienvenido al administrador de clases!</h1><br/><br/>
 
     <!-- estilos de la accion para registrar Alumno -->
 
@@ -36,9 +36,63 @@
             display: none;
         }
     </style>
+
+    <!-- API Clima Stilos -->
     
+    <style>
+        * {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: #3494E6;
+    background: -webkit-linear-gradient(to right, #EC6EAD, #3494E6);
+    background: linear-gradient(to right, #EC6EAD, #3494E6);
+}
+
+#contenedor {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+#caja1, #caja2, #caja3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 20%;
+    width: 200px;
+    height: 200px;
+}
+
+#caja1 {
+    background-color: rgba(0,0,0,0.767);
+    color:azure;    
+}
+#caja2 {
+    background-color: darkslateblue;
+    color:azure;    
+}
+#caja3 {
+    background-color: #2ab2ea;
+    color:azure;    
+}
+    </style>
+
+    <!-- toastify css -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 </head>
+
 <body>
 
     <!-- boton para registrar Alumnos en el sistema -->
@@ -76,12 +130,32 @@
             <label> Nota: <input id="nota" type="range" min="0" max="10" value=0> <span id="notas">0</span> </label> <br/><br/>
             <input id="calificarAlumno-btn" type="button" value="Calificar"></input> <br/><br/>
         </form>
-        <h4 id="finEvento"></h4>
     </div> 
 
+    <!-- API clima -->
     
+    <div id="contenedor">
+        
+        <div id="caja1">
+            <h1 id="temperatura-valor"></h1>
+            <h1 id="temperatura-descripcion"></h1>
+        </div>
 
+        <div id="caja2">
+            <h2 id="ubicacion"></h2>
+            <img id="icono-animado" src="" alt="" height="128" width="128">
+        </div>
+
+        <div id="caja3">
+            <h3>Veloc. del Viento</h3>
+            <h1 id="viento-velocidad"></h1>
+        </div>
+
+    </div>
 
     <script src="miarchivo.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>
