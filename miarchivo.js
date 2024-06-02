@@ -6,7 +6,6 @@
 
 let listadoAlumnos = []; // Listado de alumnos registrados
 let cantidadAlumnos = listadoAlumnos.length; // Cantidad de Alumnos en la clase
-let cantidadClases = [] // Cantidad de clases (1 es presente, 0 es ausente)
 
 
 ////// CLASES Y METODOS
@@ -24,7 +23,6 @@ class Alumno {
 
         this.nombreCompleto           = nombre + " " + apellido
         this.calificacionesAlumno     = []
-        this.presentesAlumno          = []
 
     }
 
@@ -33,19 +31,8 @@ class Alumno {
 
         this.calificacionesAlumno.push({clase, evento, calificacion})
 
-    } 
+    }
 
-    agregarPresente(estado) {
-
-        this.presentesAlumno.push(estado)
-
-    } 
-
-    // Calcular el promedio de las calificaciones del Alumno
-
-    // Calcular Cantidad de Presentes en porcentaje a la cantidad de clases. De ser menor a 70% pone "AUSENTE"
-
-    // 
 }
 
 
@@ -64,17 +51,39 @@ cantidadAlumnos = listadoAlumnos.length;
 ////// FUNCIONES
 
 
+////// tostify para mostrar alertas
+
+function mostrarTostify(mensajeTostify) {
+Toastify({
+    text: mensajeTostify,
+    duration: 3000,
+    destination: "https://github.com/apvarun/toastify-js",
+    newWindow: true,
+    close: true,
+    gravity: "top",
+    position: "left", 
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    },
+    onClick: function(){}
+  }).showToast()
+};
+
 //// Pedir datos para ingresar un nuevo alumno y guardar en Array
 
 function registrarAlumno(){
 
     let formularioRegistrarAlumno = document.getElementById("registrarAlumno-form");
     formularioRegistrarAlumno.addEventListener("submit", completarFormulario);
+
+    document.getElementById("calificarAlumnos-btn").style.display = "none";
+    document.getElementById("contenedor").style.display = "none";
     
     function completarFormulario(e) {
 
         e.preventDefault();
-        
+
         let nombreAlumno = document.getElementById("nombreAlumno").value;
         let apellidoAlumno = document.getElementById("apellidoAlumno").value;
         let dniAlumno = document.getElementById("dniAlumno").value;
@@ -87,7 +96,10 @@ function registrarAlumno(){
             fechaNacimientoAlumno
         ));
 
-    alert("Se ha registrado a " + listadoAlumnos[listadoAlumnos.length - 1].nombreCompleto + " con exito.");
+
+    // Mensaje al finalizar el registro
+    mostrarTostify("Se ha registrado a " + listadoAlumnos[listadoAlumnos.length - 1].nombreCompleto + " con exito.")
+
     cantidadAlumnos = listadoAlumnos.length; // Actualiza cantidad de Alumnos
     
 
@@ -105,17 +117,23 @@ function registrarAlumno(){
         document.getElementById("registrarAlumno-form").reset();
         document.getElementById("formularioRegistrarAlumno").style.display = "none";
 
+        document.getElementById("calificarAlumnos-btn").style.display = "block";
+        document.getElementById("contenedor").style.display = "block";
+
         button1.style.cssText =
     "background-color: gray; color: white; border: none; padding: .5em; border-radius: 5px;";
     }
 
 };
 
-//// Poner nota a todos los alumnos de la clase (Materia, Valor de Evaluacion)
+//// Poner nota a todos los alumnos de la clase
 
 function calificarAlumnos() {
     
     const botonSeleccionarMateria = document.querySelector("#seleccionarEvento-btn");
+
+    document.getElementById("registrarAlumno-btn").style.display = "none";
+    document.getElementById("contenedor").style.display = "none";
 
     // Boton para seleccionar la Materia y el evento
     botonSeleccionarMateria.onclick = () => {
@@ -166,6 +184,9 @@ function calificarAlumno() {
             estado: estado
         });
 
+    // mensaje por alumno calificado
+    mostrarTostify(listadoAlumnos[ordenAlumno].nombreCompleto + " " + estado + ".");
+
     // Limpiar el campo de la nota para el próximo alumno
     document.getElementById("nota").value = "";
 
@@ -176,20 +197,28 @@ function calificarAlumno() {
     if (ordenAlumno < listadoAlumnos.length) {
         mostrarAlumno();
     } else {
-        //simulador con alert que se envio en formato JSON a una base de datos
-        alert(JSON.stringify(calificacionesJSON));
+        //simulador con console log que se envio en formato JSON a una base de datos
+        console.log(JSON.stringify(calificacionesJSON));
+
         sessionStorage.removeItem("materia");
         sessionStorage.removeItem("evento");
 
         //Ocultar Formulario y cambiar color al boton
         document.getElementById("calificarAlumnos-form").reset();
-        document.getElementById("calificarAlumnos-form").style.display = "none";
+        document.getElementById("formularioCalificarAlumnos").style.display = "none";
+        document.getElementById("registrarAlumno-btn").style.display = "block";
+        document.getElementById("contenedor").style.display = "block";
 
         button2.style.cssText =
         "background-color: gray; color: white; border: none; padding: .5em; border-radius: 5px;";
 
-        //avisar que finalizo el evento
-        document.getElementById("finEvento").innerText = "Todos los alumnos fueron calificados. Evento Finalizado."
+        //mensaje con informacion de los alumnos calificados
+        Swal.fire({
+            title: "Se envio la informacion al servidor",
+            text: calificacionesJSON.length + " alumnos han sido calificados.",
+            icon: "success"
+          });
+
     }
 
     }
@@ -215,33 +244,6 @@ function calificarAlumno() {
       document.getElementById("notas").innerHTML=document.getElementById("nota").value;
   }
 
-//// Tomar presente a los Alumnos //// cambiar para que sea compatible con el DOM
-// function tomarPresente(){
-
-// // Sumar una clase nueva
-// cantidadClases.push(1)
-
-// alert("A continuacion marcara los presentes por alumno.")
-
-// for (let i = 0; i < cantidadAlumnos; i++) {
-
-//     let nombreCompletoAlumno = listadoAlumnos[i].nombreCompleto
-
-//     let estado = prompt("Alumno: " + nombreCompletoAlumno + ".\n0 - Ausente. \n1 - Presente.")
-
-//     listadoAlumnos[i].agregarPresente(estado)
-
-// }
-
-// // Terminar calculando el porcentaje de ausentes de la clase y con un filter por alumnos ausentes
-// let ausentes = listadoAlumnos.filter(ausente => ausente.presentesAlumno[length] == 0).map(ausente => "\n" + ausente.nombreCompleto)
-// let porcentaAusentes = (ausentes.length / cantidadAlumnos) * 100;
-
-// alert("En la clase de hoy hubo " + porcentaAusentes + "% de ausentes.");
-// alert("Los alumnos ausentes fueron:" + ausentes + ".");
-
-// }
-
 
 //////// APLICACION
 
@@ -262,7 +264,7 @@ button1.onclick = () => {
 };
 
 
-//// Boton Calificar Alumno
+//// Boton Calificar Alumnos
 const button2 = document.querySelector("#calificarAlumnos-btn");
 
 button2.onclick = () => {
@@ -274,3 +276,81 @@ button2.onclick = () => {
     calificarAlumnos();
     
 };
+
+
+////// Objeto visible al ingresar a la pagina
+
+//// Ver Clima por ubicacion - API
+
+window.addEventListener('load', ()=> {
+
+    let lon
+    let lat
+
+    let temperaturaValor = document.getElementById('temperatura-valor')  
+    let temperaturaDescripcion = document.getElementById('temperatura-descripcion')  
+    
+    let ubicacion = document.getElementById('ubicacion')  
+    let iconoAnimado = document.getElementById('icono-animado') 
+
+    let vientoVelocidad = document.getElementById('viento-velocidad') 
+
+
+    if(navigator.geolocation){
+       navigator.geolocation.getCurrentPosition( posicion => {
+
+           lon = posicion.coords.longitude
+           lat = posicion.coords.latitude
+
+           //ubicación por ciudad
+           const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=88e75334bee175e56c4d4deb43850fbf`
+
+           fetch(url)
+            .then( response => { return response.json()})
+            .then( data => {
+                
+                let temp = Math.round(data.main.temp - 273.15)
+
+                temperaturaValor.textContent = `${temp} ° C`
+
+                let desc = data.weather[0].description
+                temperaturaDescripcion.textContent = desc.toUpperCase()
+                ubicacion.textContent = data.name
+                
+                vientoVelocidad.textContent = `${data.wind.speed} m/s`
+
+                //iconos animados
+                switch (data.weather[0].main) {
+                    case 'Thunderstorm':
+                      iconoAnimado.src='animated/thunder.svg'
+                      break;
+                    case 'Drizzle':
+                      iconoAnimado.src='animated/rainy-2.svg'
+                      break;
+                    case 'Rain':
+                      iconoAnimado.src='animated/rainy-7.svg'
+                      break;
+                    case 'Snow':
+                      iconoAnimado.src='animated/snowy-6.svg'
+                      break;                        
+                    case 'Clear':
+                        iconoAnimado.src='animated/day.svg'
+                      break;
+                    case 'Atmosphere':
+                      iconoAnimado.src='animated/weather.svg'
+                        break;  
+                    case 'Clouds':
+                        iconoAnimado.src='animated/cloudy-day-1.svg'
+                        break;  
+                    default:
+                      iconoAnimado.src='animated/cloudy-day-1.svg'
+                  }
+
+            })
+            .catch( error => {
+                console.log(error)
+            })
+       })
+          
+    }
+})
